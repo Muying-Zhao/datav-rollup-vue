@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>datav components library</title>
+    <!-- 3.2.4版本 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.4/dist/vue.global.prod.js"></script>
+    <script src="../dist/datav.umd.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        {{ message }}
+        <test-component></test-component>
+        <test-component2></test-component2>
+        <svg-demo></svg-demo>
+        <svg width="50" height="50" style="color:orange">
+         <use href="#more"></use>
+        </svg>
+    </div>
+    <script>
+        Vue.createApp({
+            setup() {
+                var message = 'hello datav!'
+                return {
+                    message
+                }
+            }
+        }).use(window.Datav).mount('#app')
+    </script>
+</body>
+
+</html>
