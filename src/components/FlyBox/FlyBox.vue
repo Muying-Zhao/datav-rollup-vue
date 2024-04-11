@@ -1,5 +1,5 @@
 <template>
-    <div class="wrapper" :ref="refName">
+    <div class="wrapper" ref="wrapper">
         <svg :width="width" :height="height">
             <defs>
                 <path :id="pathId" :d="path" fill="none"></path>
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { computed, ref, onMounted, getCurrentInstance } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 // import { v4 as uuidv4 } from 'uuid';
 export default {
     name: 'FlyBox',
@@ -51,29 +51,33 @@ export default {
         // uuidv4();
         const width = ref(0)
         const height = ref(0)
-        const refName = 'wrapper'
-        const pathId=`${refName}-path-id`
-        const radialGradientId= `${refName}-gradient-id`
-        const maskId= `${refName}-mask-id`
+        // const refName = 'wrapper'
+        const wrapper = ref(null)
+        const pathId=`wrapper-path-id`
+        const radialGradientId= `wrapper-gradient-id`
+        const maskId= `wrapper-mask-id`
         const path = computed(() =>
             `M 5 5 L ${width.value - 15} 5 L ${width.value - 15} ${height.value - 5} L 5 ${height.value - 5} Z`
         )
 
         const init = () => {
-            const instance = getCurrentInstance()
-            const dom = instance.ctx.$refs[refName]
-            // console.log(dom)
-            width.value = dom.clientWidth
-            height.value = dom.clientHeight
+            if(wrapper.value){
+                // const instance = getCurrentInstance()
+                // const dom = instance.ctx.$refs[refName]
+                const dom = wrapper.value
+                console.log(dom,'dom')
+                width.value = dom.clientWidth
+                height.value = dom.clientHeight
+            }
         }
 
         onMounted(() => {
             init()
         })
 
-        console.log(path, 'path')
+        // console.log(path, 'path')
         return {
-            width, height, refName, path, pathId, radialGradientId, maskId
+            width, height, path, pathId, radialGradientId, maskId, wrapper
         }
     }
 }

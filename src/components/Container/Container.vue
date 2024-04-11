@@ -1,5 +1,5 @@
 <template>
-    <div id="container" :ref="refName">
+    <div id="container" ref="container">
         <template v-if="ready">
             <slot></slot>
         </template>
@@ -7,7 +7,8 @@
 </template>
 
 <script>
-import { ref, getCurrentInstance, onMounted, onUnmounted, nextTick } from 'vue';
+// import { ref, getCurrentInstance, onMounted, onUnmounted, nextTick } from 'vue';
+import { ref, onMounted, onUnmounted, nextTick } from 'vue';
 import { debounce } from '../../utils/index';
 export default {
     name: 'Container',
@@ -15,35 +16,44 @@ export default {
         options: Object
     },
     setup(ctx) {
-        const refName = 'container'
+        // const refName = 'container'
+        const container = ref(null)
         const width = ref(0)
         const height = ref(0)
         const originalWidth = ref(0)
         const originalHeight = ref(0)
-        const ready=ref(false)
-        let context, dom, observer
+        const ready = ref(false)
+        // let context, dom, observer
+        let  dom, observer
 
         const initSize = () => {
             return new Promise((resolve) => {
                 // nextTick保证逻辑是在渲染之后执行
                 nextTick(() => {
-                    dom = context.$refs[refName]
-                    // 获取大屏的真实尺寸
-                    if (ctx.options && ctx.options.width && ctx.options.height) {
-                        width.value = ctx.options.width
-                        height.value = ctx.options.height
-                    } else {
-                        width.value = dom.clientWidth
-                        height.value = dom.clientHeight
+                    if(container.value){
+                        // console.log(context, 'context')
+                        // let key={ container: 'div#container.container' }
+                        // console.log(context.$refs, 'context.$refs')
+                        dom = container.value
+                        // 获取大屏的真实尺寸
+                        if (ctx.options && ctx.options.width && ctx.options.height) {
+                            width.value = ctx.options.width
+                            height.value = ctx.options.height
+                        } else {
+                            width.value = dom.clientWidth
+                            height.value = dom.clientHeight
+                        }
+                        // 获取画布尺寸
+                        if (!originalWidth.value || !originalHeight.value) {
+                            originalWidth.value = window.screen.width
+                            originalHeight.value = window.screen.height
+                        }
+                        // console.log(dom)
+                        console.log(width.value, height.value, originalWidth.value, originalHeight.value)
+                        resolve()
                     }
-                    // 获取画布尺寸
-                    if (!originalWidth.value || !originalHeight.value) {
-                        originalWidth.value = window.screen.width
-                        originalHeight.value = window.screen.height
-                    }
-                    // console.log(dom)
-                    console.log(width.value, height.value, originalWidth.value, originalHeight.value)
-                    resolve()
+                }).catch((e) => {
+                    console.log(e, 'e')
                 })
             })
         }
@@ -68,7 +78,7 @@ export default {
             const realHeight = height.value || originalHeight.value
             const widthScale = currentWidth / realWidth
             const heightScale = currentHeight / realHeight
-            dom &&( dom.style.transform = `scale(${widthScale},${heightScale})`)
+            dom && (dom.style.transform = `scale(${widthScale},${heightScale})`)
         }
 
         const onResize = async (e) => {
@@ -96,21 +106,22 @@ export default {
         }
 
         onMounted(async () => {
-            ready.value=false
-            context = getCurrentInstance().ctx
+            ready.value = false
+            // context = getCurrentInstance().ctx
             await initSize()
             updateSize()
             updateScale()
             window.addEventListener('resize', debounce(100, onResize))
             initMutationObserver()
-            ready.value=true
+            ready.value = true
         })
 
         onUnmounted(() => {
             window.removeEventListener('resize', onResize)
             removeMutationObserver()
         })
-        return { refName, ready }
+        // return {  ready, refName }
+        return {  ready, container }
     }
 }
 </script>

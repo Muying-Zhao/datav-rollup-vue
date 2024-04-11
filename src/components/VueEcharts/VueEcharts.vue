@@ -17,7 +17,7 @@ export default {
         const initChart=()=>{
             if(!chart){
                 dom = document.getElementsByClassName('echarts')[0]
-                console.log(dom,'dom')
+                // console.log(dom,'dom')
                 chart = Echarts.init(dom)
             }
             chart && chart.setOption(props.options)
