@@ -5,8 +5,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>datav components library</title>
-    <!-- 3.2.4版本 -->
+    <!-- 引入 Vue 3 全局构建的3.2.4版本 -->
     <script src="https://cdn.jsdelivr.net/npm/vue@3.2.4/dist/vue.global.prod.js"></script>
+    <!-- 
+        包含了Vue 3 组件库以及它依赖的所有代码，
+        以便在没有模块打包器（如 Webpack、Rollup 等）
+        的情况下直接在浏览器中运行。 
+    -->
     <script src="../dist/datav.umd.js"></script>
 </head>
 
@@ -17,7 +22,7 @@
         <test-component2></test-component2>
         <svg-demo></svg-demo>
         <svg width="50" height="50" style="color:orange">
-         <use href="#more"></use>
+            <use href="#more"></use>
         </svg>
     </div>
     <script>

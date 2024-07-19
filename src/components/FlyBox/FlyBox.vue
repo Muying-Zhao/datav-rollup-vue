@@ -65,7 +65,7 @@ export default {
                 // const instance = getCurrentInstance()
                 // const dom = instance.ctx.$refs[refName]
                 const dom = wrapper.value
-                console.log(dom,'dom')
+                // console.log(dom,'dom')
                 width.value = dom.clientWidth
                 height.value = dom.clientHeight
             }
